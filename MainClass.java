@@ -1,129 +1,62 @@
-package stackImp;
+package priorityQueue;
 
 import java.util.Scanner;
 
 public class MainClass {
-
-	
-	public static void main(String[] args){
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Expression :");
-		String exp = sc.nextLine();
-		System.out.println("Ans :"+evaluate(exp));
+	static Scanner sc =  new Scanner(System.in);
+	public static void main(String[] args) {
+		System.out.println("Enter queue total Size");
+		int size = sc.nextInt();
+		PriorityQueue queue = new PriorityQueue(size);
+		while(true){
+			System.out.println("1.Add to queue");
+			System.out.println("2.Remove from queue");
+			System.out.println("3.Peek");
+			System.out.println("4.Display");
+			System.out.println("5.Virat kholi Strategy");
+			int choice = sc.nextInt();
+			switch (choice) {
+			case 1:
+				System.out.println("Enter element");
+				queue.enqueue(sc.nextInt());
+				break;
+			case 2:
+				queue.deQueue();
+				break;
+			case 3:
+				System.out.println(queue.peek());
+				break;
+			case 4:
+				queue.display();
+				break;
+			case 5:
+				vKohli();
+				break;
+			default:
+				sc.close();
+				return;
+			}
+		}
 	}
-	
-	
-	public static int evaluate(String expression)
-    {
-        char[] tokens = expression.toCharArray();
- 
-         // Stack for numbers: 'values'
-        MyStack values = new MyStack();
- 
-        // Stack for Operators: 'ops'
-        MyStack ops = new MyStack();
- 
-        for (int i = 0; i < tokens.length; i++)
-        {
-             
-            // Current token is a 
-            // whitespace, skip it
-            if (tokens[i] == ' ')
-                continue;
- 
-            // Current token is a number, 
-            // push it to stack for numbers
-            if (tokens[i] >= '0' && 
-                 tokens[i] <= '9')
-            {
-                StringBuffer sbuf = new
-                            StringBuffer();
-                 
-                // There may be more than one 
-                // digits in number
-                while (i < tokens.length && 
-                        tokens[i] >= '0' && 
-                          tokens[i] <= '9')
-                    sbuf.append(tokens[i++]);
-                values.push(Integer.parseInt(sbuf.
-                                      toString()));
-                  i--;
-            }
- 
-            // Current token is an opening brace, 
-            // push it to 'ops'
-            else if (tokens[i] == '(')
-                ops.push(tokens[i]);
- 
-            // Closing brace encountered, 
-            // solve entire brace
-            else if (tokens[i] == ')')
-            {
-                while (ops.opPeek() != '(')
-                  values.push(applyOp(ops.opPop(), 
-                                   values.intPop(), 
-                                 values.intPop()));
-                ops.opPop();
-            }
- 
-            // Current token is an operator.
-            else if (tokens[i] == '+' || 
-                     tokens[i] == '-' ||
-                     tokens[i] == '*' || 
-                        tokens[i] == '/')
-            {
-                while (!ops.isEmpty() && hasPrecedence(tokens[i],ops.opPeek()))
-                		values.push(applyOp(ops.opPop(),values.intPop(),values.intPop()));
- 
-                // Push current token to 'ops'.
-                ops.push(tokens[i]);
-            }
-        }
- 
-        // Entire expression has been 
-        // parsed at this point, apply remaining
-        // ops to remaining values
-        while (!ops.isEmpty())
-            values.push(applyOp(ops.opPop(), 
-                             values.intPop(), 
-                           values.intPop()));
- 
-        // Top of 'values' contains 
-        // result, return it
-        return values.intPop();
-    }
- 
-    // Returns true if 'op2' has higher 
-    // or same precedence as 'op1',
-    // otherwise returns false.
-    public static boolean hasPrecedence(char op1, char op2)
-    {
-        if (op2 == '(' || op2 == ')')
-            return false;
-        if ((op1 == '*' || op1 == '/') && 
-            (op2 == '+' || op2 == '-'))
-            return false;
-        else
-            return true;
-    }
-	 public static int applyOp(char op,int b, int a) {
-		 
-		 switch (op){
-		 	case '+':
-		 		return a + b;
-		 	case '-':
-		 		return a - b;
-		 	case '*':
-		 		return a * b;
-		 	case '/':
-		 		if (b == 0)
-		 			throw new
-		 			UnsupportedOperationException(
-		 					"Cannot divide by zero");
-		 		return a / b;
-		 }
-		 return 0;
-	 	}
+
+	//method to solve virat kohli problem using priority Queue
+	private static void vKohli() {
+		while(true){
+			System.out.println("Enter total number of bowlers or negative number to return main Menu");
+			int bowlers = sc.nextInt();
+			if(bowlers < 0) return;
+			PriorityQueue queue = new PriorityQueue(bowlers);
+			System.out.println("Total number of bowls virat going to play");
+			int totalBowl = sc.nextInt();
+			System.out.println("Enter number of bowls remaining for each player");
+			while(totalBowl > 0){
+				int bowlLeft = sc.nextInt();
+				queue.enqueue(bowlLeft);
+				totalBowl-=bowlLeft;
+			}
+			queue.displayForVkohli();
+			
+		}
+		
+	}
 }
-	 
-	 
